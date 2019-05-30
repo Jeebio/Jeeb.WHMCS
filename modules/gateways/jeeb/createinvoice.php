@@ -90,15 +90,11 @@ $baseUri      = "https://core.jeeb.io/api/" ;
 $signature    = $GATEWAY['apiKey']; // Signature
 $notification = $_POST['systemURL'].'/modules/gateways/callback/jeeb.php';  // Notification Url
 $callback     = $_POST['systemURL'];  // Redirect Url
-$order_total  = $total;  // Total price in irr
+$order_total  = $total;  // Total payable amount
 $baseCur      = "";
 $lang         = "";
 $target_cur   = "";
 
-if($baseCur=='toman'){
-  $baseCur='irr';
-  $order_total *= 10;
-}
 
 switch ($GATEWAY["language"]) {
   case 'Auto-select':
@@ -112,7 +108,7 @@ switch ($GATEWAY["language"]) {
     break;
 
   default:
-    # code...
+    $lang=NULL;
     break;
 }
 
@@ -137,6 +133,13 @@ switch ($GATEWAY["baseCur"]) {
     # code...
     break;
 }
+
+if($baseCur=='toman'){
+  $baseCur='irr';
+  $order_total *= 10;
+}
+
+
 $params = array(
                 'BTC',
                 'XRP',
@@ -154,6 +157,7 @@ foreach ($params as $p) {
 
 error_log("Base Uri : ".$baseUri." Signature : ".$signature." CallbackUri : ".$callBack." NotificationUri : ".$notification." Invoice Id:".$invoiceId);
 error_log("Cost = ". $total. " TargetUri = ". $target_cur);
+
 
 
 $btc = convertIrrToBtc($baseUri, $order_total, $signature, $baseCur);
