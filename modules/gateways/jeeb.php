@@ -13,32 +13,47 @@ function jeeb_config()
             "Value"=>"Jeeb"
         ),
         'apiKey' => array(
-            'FriendlyName' => 'Signature for your jeeb.io merchant account',
-            'Type'         => 'text'
+            'FriendlyName' => 'Signature',
+            'Type'         => 'text',
+            'description' => 'The signature provided by Jeeb for you merchant.'
         ),
         'network' => array(
-          'FriendlyName' => 'Test or Live',
+          'FriendlyName' => 'Allow Testnets',
           'Type'         => 'dropdown',
-          'Options'      => 'live,test',
+          'Options'      => 'yes,no',
+          'description'  => 'Allows testnets such as TEST-BTC to get processed.'
+        ),
+        'allowRefund' => array(
+          'FriendlyName' => 'Allow Refund',
+          'Type'         => 'dropdown',
+          'Options'      => 'yes,no',
+          'description'  => 'Allows payments to be refunded.'
         ),
         'language' => array(
-          'FriendlyName' => 'Select the language of payment page',
+          'FriendlyName' => 'Language',
           'Type'         => 'dropdown',
           'Options'      => 'Auto-select,English,Persian',
+          'description'  => 'The language of the payment area.'
+        ),
+        'expiration' => array(
+            'FriendlyName' => 'Expiration Time',
+            'Type'         => 'text',
+            'description'  => 'Expands default payments expiration time. It should be between 15 to 2880 (mins).',
         ),
         'baseCur' => array(
-          'FriendlyName' => 'Select base currency',
+          'FriendlyName' => 'Base Currency',
           'Type'         => 'dropdown',
           'Options'      => 'BTC,EUR,IRR,TOMAN,USD',
+          'description' => 'The base currency of your website.'
         ),
         'BTC' => array (
-          "FriendlyName" => "Target Curency",
+          "FriendlyName" => "Payable Currencies",
           "Type" => "yesno",
           "Size" => "25",
           "Description" => "BTC",
         ),
         'XRP' => array (
-          "FriendlyName" => "(Multi-Select)",
+          "FriendlyName" => "The currencies which users can use for payments.(Multi-Select)",
           "Type" => "yesno",
           "Size" => "25",
           "Description" => "XRP",

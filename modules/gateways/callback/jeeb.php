@@ -16,6 +16,24 @@ if (file_exists('../../../dbconnect.php')) {
     die('[ERROR] In modules/gateways/jeeb/createinvoice.php: include error: Cannot find dbconnect.php or init.php');
 }
 
+public function confirm_payment($signature, $options = array()) {
+
+    $post = json_encode($options);
+    $ch = curl_init(BASE_URL . 'payments/' . $signature . '/confirm/');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type:application/json',
+        'User-Agent:' . PLUGIN_NAME . '/' . PLUGIN_VERSION,
+    ));
+    $result = curl_exec($ch);
+    $data = json_decode($result, true);
+    error_log('Response =>'. var_export($data, TRUE));
+    return (bool) $data['result']['isConfirmed'];
+
+}
+
 $gatewaymodule = 'jeeb';
 $GATEWAY       = getGatewayVariables($gatewaymodule);
 
@@ -62,7 +80,7 @@ if($json['signature']==$GATEWAY['apiKey']){
             break;
         case '3':
             // New payment, not confirmed
-            logTransaction($GATEWAY['name'], $json, 'The payment has been received, but the transaction has not been confirmed on the bitcoin network. This will be updated when the transaction has been confirmed.');
+            logTransaction($GATEWAY['name'], $json, 'The payment has been received, but the transaction has not been confirmed on the bitcoin network. This will be updated when the transaction has been confirmed. Reference No : '.$json['referenceNo']);
             error_log('Order Id received = '.$json['orderNo'].' stateId = '.$json['stateId']);
             break;
         case '4':
@@ -73,25 +91,7 @@ if($json['signature']==$GATEWAY['apiKey']){
               "token" => $json["token"]
             );
 
-            $data_string = json_encode($data);
-            $api_key = $GATEWAY['apiKey'];
-            $network_uri = "https://core.jeeb.io/api/" ;
-            $url = $network_uri.'payments/'.$api_key.'/confirm';
-            error_log("Signature:".$api_key." Base-Url:".$network_uri." Url:".$url);
-
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data_string))
-            );
-
-            $result = curl_exec($ch);
-            $data = json_decode( $result , true);
-            error_log("data = ".var_export($data, TRUE));
-            var_dump("Data".$data);
+            $is_confirmed = confirm_payment($signature, $data);
 
 
             if($data['result']['isConfirmed']){
@@ -113,12 +113,12 @@ if($json['signature']==$GATEWAY['apiKey']){
             break;
         case '6':
             // Invoice Over Paid
-            logTransaction($GATEWAY['name'], $json, 'The transaction was incomplete(The invoice was over paid). Do not process this order!');
+            logTransaction($GATEWAY['name'], $json, 'The transaction was incomplete(The invoice was over paid) and refund is initiated.');
             error_log('Order Id received = '.$json['orderNo'].' stateId = '.$json['stateId']);
             break;
         case '7':
             // Invoice Under Paid
-            logTransaction($GATEWAY['name'], $json, 'The transaction was incomplete(The invoice was under paid). Do not process this order!');
+            logTransaction($GATEWAY['name'], $json, 'The transaction was incomplete(The invoice was under paid) and refund is initiated.');
             error_log('Order Id received = '.$json['orderNo'].' stateId = '.$json['stateId']);
             break;
         default:
