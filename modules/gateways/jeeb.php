@@ -10,63 +10,79 @@ function jeeb_config()
     $configarray = array(
         "FriendlyName" => array(
             "Type" => "System",
-            "Value"=>"Jeeb"
+            "Value" => "Jeeb",
         ),
         'apiKey' => array(
-            'FriendlyName' => 'Signature for your jeeb.io merchant account',
-            'Type'         => 'text'
+            'FriendlyName' => 'Signature',
+            'Type' => 'text',
+            'Description' => 'The signature provided by Jeeb for you merchant.',
         ),
+
+        'baseCur' => array(
+            'FriendlyName' => 'Base Currency',
+            'Type' => 'dropdown',
+            'Options' => 'BTC,IRR,TOMAN,USD,EUR,GBP,CAD,AUD,AED,TRY,CNY,JPY',
+            'Description' => 'The base currency of your website.',
+        ),
+        'BTC' => array(
+            "FriendlyName" => "Bitcoin",
+            'Options' => 'yes,no',
+            "Size" => "25",
+            'Description' => "Allow Bitcoin to be payable.",
+        ),
+        'DOGE' => array(
+            'FriendlyName' => "Dogecoin",
+            'Options' => 'yes,no',
+            "Size" => "25",
+            'Description' => "Allow Dogecoin to be payable.",
+        ),
+        'LTC' => array(
+            'FriendlyName' => "Litecoin",
+            'Options' => 'yes,no',
+            "Size" => "25",
+            'Description' => "Allow Litecoin to be payable.",
+        ),
+        'ETH' => array(
+            'FriendlyName' => "Ethereum",
+            'Options' => 'yes,no',
+            "Size" => "25",
+            'Description' => "Allow Ethereum to be payable.",
+        ),
+        'TEST-BTC' => array(
+            'FriendlyName' => "Bitcoin Testnet",
+            'Options' => 'yes,no',
+            "Size" => "25",
+            'Description' => "Allow Bitcoin testnet to be payable.",
+        ),
+        'TEST-LTC' => array(
+            'FriendlyName' => "Litecoin Testnet",
+            'Options' => 'yes,no',
+            "Size" => "25",
+            'Description' => "Allow Litecoin testnet to be payable.",
+        ),
+
         'network' => array(
-          'FriendlyName' => 'Test or Live',
-          'Type'         => 'dropdown',
-          'Options'      => 'live,test',
+            'FriendlyName' => 'Allow Testnets',
+            'Type' => 'dropdown',
+            'Options' => 'yes,no',
+            'Description' => 'Allows testnets such as TEST-BTC to get processed.',
+        ),
+        'allowRefund' => array(
+            'FriendlyName' => 'Allow Refund',
+            'Type' => 'dropdown',
+            'Options' => 'yes,no',
+            'Description' => 'Allows payments to be refunded.',
         ),
         'language' => array(
-          'FriendlyName' => 'Select the language of payment page',
-          'Type'         => 'dropdown',
-          'Options'      => 'Auto-select,English,Persian',
+            'FriendlyName' => 'Language',
+            'Type' => 'dropdown',
+            'Options' => 'Auto-select,English,Persian',
+            'Description' => 'The language of the payment area.',
         ),
-        'baseCur' => array(
-          'FriendlyName' => 'Select base currency',
-          'Type'         => 'dropdown',
-          'Options'      => 'BTC,EUR,IRR,TOMAN,USD',
-        ),
-        'BTC' => array (
-          "FriendlyName" => "Target Curency",
-          "Type" => "yesno",
-          "Size" => "25",
-          "Description" => "BTC",
-        ),
-        'XRP' => array (
-          "FriendlyName" => "(Multi-Select)",
-          "Type" => "yesno",
-          "Size" => "25",
-          "Description" => "XRP",
-        ),
-        'XMR' => array (
-          "Type" => "yesno",
-          "Size" => "25",
-          "Description" => "XMR",
-        ),
-        'LTC' => array (
-          "Type" => "yesno",
-          "Size" => "25",
-          "Description" => "LTC",
-        ),
-        'BCH' => array (
-          "Type" => "yesno",
-          "Size" => "25",
-          "Description" => "BCH",
-        ),
-        'ETH' => array (
-          "Type" => "yesno",
-          "Size" => "25",
-          "Description" => "ETH",
-        ),
-        'TEST-BTC' => array (
-          "Type" => "yesno",
-          "Size" => "25",
-          "Description" => "TESTBTC",
+        'expiration' => array(
+            'FriendlyName' => 'Expiration Time',
+            'Type' => 'text',
+            'Description' => 'Expands default payments expiration time. It should be between 15 to 2880 (mins).',
         ),
     );
 
@@ -92,8 +108,8 @@ function jeeb_link($params)
     $systemurl = $params['systemurl'];
 
     $post = array(
-        'invoiceId'     => $invoiceid,
-        'systemURL'     => $systemurl,
+        'invoiceId' => $invoiceid,
+        'systemURL' => $systemurl,
     );
 
     $form = '<form action="' . $systemurl . 'modules/gateways/jeeb/createinvoice.php" method="POST">';
