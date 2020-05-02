@@ -16,14 +16,11 @@ if (file_exists('../../../dbconnect.php')) {
 }
 
 define("PLUGIN_NAME", 'WHMCS');
-define("PLUGIN_VERSION", '3.2');
+define("PLUGIN_VERSION", '3.3');
 define("BASE_URL", 'https://core.jeeb.io/api/');
 
-function convert_base_to_bitcoin($amount, $baseCur)
+function convert_base_to_bitcoin($baseCur,$amount)
 {
-    // error_log("Entered into Convert Base To Target");
-
-    // return Jeeb::convert_irr_to_btc($url, $amount, $signature);
     $ch = curl_init(BASE_URL . 'currency?value=' . $amount . '&base=' . $baseCur . '&target=btc');
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -39,7 +36,7 @@ function convert_base_to_bitcoin($amount, $baseCur)
 
 }
 
-function create_payment($options = array(), $signature)
+function create_payment($signature, $options = array())
 {
     $post = json_encode($options);
 
@@ -92,7 +89,7 @@ unset($options['invoiceId']);
 unset($options['systemURL']);
 
 $signature = $GATEWAY['apiKey']; // Signature
-$notification = $_POST['systemURL'] . '/modules/gateways/callback/jeeb.php'; // Notification Url
+$notification = $_POST['systemURL'] . 'modules/gateways/callback/jeeb.php'; // Notification Url
 $callback = $_POST['systemURL']; // Redirect Url
 $order_total = $total; // Total payable amount
 $baseCur = "";
@@ -164,12 +161,12 @@ if ($baseCur == 'toman') {
 }
 
 $params = array(
-    'BTC',
-    'DOGE',
-    'LTC',
-    'ETH',
-    'TEST-BTC',
-    'TEST-LTC',
+    'BTC' => 'btc',
+    'DOGE' => 'doge',
+    'LTC' => 'ltc',
+    'ETH' => 'eth',
+    'TEST-BTC' => 'tbtc',
+    'TEST-LTC' => 'tltc',
 );
 
 $expiration = $GATEWAY['expiration'];
@@ -181,8 +178,8 @@ if (isset($expiration) === false ||
     $expiration = 15;
 }
 
-foreach ($params as $p) {
-    $GATEWAY[$p] == "on" ? $target_cur .= $p . "/" : $target_cur .= "";
+foreach ($params as $key => $value) {
+    $GATEWAY[$key] == "yes" ? $target_cur .= (strlen($target_cur) > 0 ? "/" : '') . $value : $target_cur .= "";
 }
 
 $amount = convert_base_to_bitcoin($baseCur, $order_total);
@@ -199,6 +196,7 @@ $params = array(
     'allowReject' => $GATEWAY['allowRefund'] == "no" ? false : true,
     "language" => $lang,
 );
+
 
 $token = create_payment($signature, $params);
 

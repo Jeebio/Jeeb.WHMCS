@@ -26,36 +26,42 @@ function jeeb_config()
         ),
         'BTC' => array(
             "FriendlyName" => "Bitcoin",
+			'Type' => 'dropdown',
             'Options' => 'yes,no',
             "Size" => "25",
             'Description' => "Allow Bitcoin to be payable.",
         ),
         'DOGE' => array(
             'FriendlyName' => "Dogecoin",
+			'Type' => 'dropdown',
             'Options' => 'yes,no',
             "Size" => "25",
             'Description' => "Allow Dogecoin to be payable.",
         ),
         'LTC' => array(
             'FriendlyName' => "Litecoin",
+			'Type' => 'dropdown',
             'Options' => 'yes,no',
             "Size" => "25",
             'Description' => "Allow Litecoin to be payable.",
         ),
         'ETH' => array(
             'FriendlyName' => "Ethereum",
+			'Type' => 'dropdown',
             'Options' => 'yes,no',
             "Size" => "25",
             'Description' => "Allow Ethereum to be payable.",
         ),
         'TEST-BTC' => array(
             'FriendlyName' => "Bitcoin Testnet",
+			'Type' => 'dropdown',
             'Options' => 'yes,no',
             "Size" => "25",
             'Description' => "Allow Bitcoin testnet to be payable.",
         ),
         'TEST-LTC' => array(
             'FriendlyName' => "Litecoin Testnet",
+			'Type' => 'dropdown',
             'Options' => 'yes,no',
             "Size" => "25",
             'Description' => "Allow Litecoin testnet to be payable.",
@@ -72,6 +78,12 @@ function jeeb_config()
             'Type' => 'dropdown',
             'Options' => 'yes,no',
             'Description' => 'Allows payments to be refunded.',
+        ),
+        'hookLog' => array(
+            'FriendlyName' => 'Webhook Log',
+            'Type' => 'radio',
+            'Options' => 'yes,no',
+            'Description' => 'Allows webhook activities to be logged in module directory.',
         ),
         'language' => array(
             'FriendlyName' => 'Language',
@@ -120,6 +132,5 @@ function jeeb_link($params)
 
     $form .= '<input type="submit" value="' . $params['langpaynow'] . '" />';
     $form .= '</form>';
-
     return $form;
 }
