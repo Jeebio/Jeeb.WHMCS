@@ -1,5 +1,8 @@
 <?php
 
+include 'jeeb/includes/consts.php';
+include 'jeeb/includes/utils.php';
+
 /**
  * Returns configuration options array.
  *
@@ -13,82 +16,54 @@ function jeeb_config()
             "Value" => "Jeeb",
         ),
         'apiKey' => array(
-            'FriendlyName' => 'Signature',
+            'FriendlyName' => 'API Key',
             'Type' => 'text',
-            'Description' => 'The signature provided by Jeeb for you merchant.',
+            'Description' => 'The API key provided by Jeeb for you merchant.',
         ),
-
         'baseCur' => array(
             'FriendlyName' => 'Base Currency',
             'Type' => 'dropdown',
-            'Options' => 'BTC,IRR,TOMAN,USD,EUR,GBP,CAD,AUD,AED,TRY,CNY,JPY',
+            'Options' => getJeebAvailableCurrencies(),
             'Description' => 'The base currency of your website.',
         ),
-        'BTC' => array(
-            "FriendlyName" => "Bitcoin",
-			'Type' => 'dropdown',
-            'Options' => 'yes,no',
-            "Size" => "25",
-            'Description' => "Allow Bitcoin to be payable.",
-        ),
-        'DOGE' => array(
-            'FriendlyName' => "Dogecoin",
-			'Type' => 'dropdown',
-            'Options' => 'yes,no',
-            "Size" => "25",
-            'Description' => "Allow Dogecoin to be payable.",
-        ),
-        'LTC' => array(
-            'FriendlyName' => "Litecoin",
-			'Type' => 'dropdown',
-            'Options' => 'yes,no',
-            "Size" => "25",
-            'Description' => "Allow Litecoin to be payable.",
-        ),
-        'ETH' => array(
-            'FriendlyName' => "Ethereum",
-			'Type' => 'dropdown',
-            'Options' => 'yes,no',
-            "Size" => "25",
-            'Description' => "Allow Ethereum to be payable.",
-        ),
-        'TEST-BTC' => array(
-            'FriendlyName' => "Bitcoin Testnet",
-			'Type' => 'dropdown',
-            'Options' => 'yes,no',
-            "Size" => "25",
-            'Description' => "Allow Bitcoin testnet to be payable.",
-        ),
-        'TEST-LTC' => array(
-            'FriendlyName' => "Litecoin Testnet",
-			'Type' => 'dropdown',
-            'Options' => 'yes,no',
-            "Size" => "25",
-            'Description' => "Allow Litecoin testnet to be payable.",
-        ),
+    );
 
-        'network' => array(
-            'FriendlyName' => 'Allow Testnets',
-            'Type' => 'dropdown',
+    $currencies = getJeebAvailableCoins();
+
+    foreach ($currencies as $currency => $title) {
+        $configarray[$currency] = array(
+            "FriendlyName" => $title,
+			'Type' => 'dropdown',
             'Options' => 'yes,no',
+            "Size" => "25",
+            'Description' => "Allow " . $title . " to be payable.",
+        );
+    }
+    
+    $configarray = array_merge($configarray, array(
+        'allowTestnets' => array(
+            'FriendlyName' => 'Allow Testnets',
+            'Type' => 'yesno',
             'Description' => 'Allows testnets such as TEST-BTC to get processed.',
         ),
         'allowRefund' => array(
             'FriendlyName' => 'Allow Refund',
-            'Type' => 'dropdown',
-            'Options' => 'yes,no',
+            'Type' => 'yesno',
             'Description' => 'Allows payments to be refunded.',
         ),
         'hookLog' => array(
             'FriendlyName' => 'Webhook Log',
-            'Type' => 'radio',
-            'Options' => 'yes,no',
+            'Type' => 'yesno',
             'Description' => 'Allows webhook activities to be logged in module directory.',
         ),
         'language' => array(
             'FriendlyName' => 'Language',
             'Type' => 'dropdown',
-            'Options' => 'Auto-select,English,Persian',
+            'Options' => array(
+                ''   => 'Auto',
+                'en' => 'English',
+                'fa' => 'Persian',
+            ),
             'Description' => 'The language of the payment area.',
         ),
         'expiration' => array(
@@ -96,7 +71,7 @@ function jeeb_config()
             'Type' => 'text',
             'Description' => 'Expands default payments expiration time. It should be between 15 to 2880 (mins).',
         ),
-    );
+    ));
 
     return $configarray;
 }
