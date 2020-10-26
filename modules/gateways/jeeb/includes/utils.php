@@ -18,8 +18,8 @@ if (!function_exists('getJeebAvailableCurrencies')) {
 
         $available_currencies = array(
             "BTC" => "BTC (Bitcoin)",
-            "IRT" => "IRT (Toman)",
-            "DAI" => "DAI (Dai)",
+            "IRR" => "IRR (Iranian Rials)",
+            "IRT" => "IRT (Iranian Toman)",
             "USD" => "USD (US Dollar)",
             "EUR" => "EUR (Euro)",
             "GBP" => "GBP (Pound)",
@@ -28,7 +28,7 @@ if (!function_exists('getJeebAvailableCurrencies')) {
             "JPY" => "JPY (Yen)",
             "CNY" => "CNY (Yuan)",
             "AED" => "AED (Dirham)",
-            "TRY" => "TRY (Lira)",
+            "TRY" => "TRY (Lira)"
         );
 
         return $available_currencies;
@@ -47,19 +47,17 @@ if (!function_exists('getJeebAvailableCoins')) {
     {
         $available_coins = array(
             "BTC" => 'BTC (Bitcoin)',
-            "ETH" => "ETH",
-            "DOGE" => "DOGE",
-            "LTC" => "LTC",
-            "USDT" => "USDT",
-            "BNB" => "BNB",
-            "USDC" => "USDC",
-            "ZRX" => "ZRX",
-            "LINK" => "LINK",
-            "PAX" => "PAX",
-            "TBTC" => "TBTC",
-            "TETH" => "TETH",
-            "TDOGE" => "TDOGE",
-            "TLTC" => "TLTC",
+            "ETH" => "ETH (Ethereum)",
+            "DOGE" => "DOGE (Dogecoin)",
+            "LTC" => "LTC (Litecoin)",
+            "USDT" => "USDT (TetherUS)",
+            "BNB" => "BNB (Binance Coin)",
+            "USDC" => "USDC (USD Coin)",
+            "LINK" => "LINK (Chainlink)",
+            "ZRX" => "ZRX (0x)",
+            "PAX" => "PAX (Paxos Standard)",
+            "TBTC" => "TBTC (Bitcoin Testnet)",
+            "TETH" => "TETH (Ethereum Testnet)"
         );
 
         return $available_coins;
@@ -134,7 +132,7 @@ if (!function_exists('prepareCreatePaymentParams')) {
             'orderNo' => $invoice_id,
             'client' => 'Internal',
             'type' => 'Restricted',
-            'mode' => 'Fast',
+            'mode' => 'Standard',
             'payableCoins' => getPayableCoins(),
             'baseAmount' => $amount,
             'baseCurrencyId' => $base_currency,
