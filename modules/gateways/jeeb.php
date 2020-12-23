@@ -1,7 +1,6 @@
 <?php
 
-include 'jeeb/includes/consts.php';
-include 'jeeb/includes/utils.php';
+include 'jeeb/includes/currencies.php';
 
 /**
  * Returns configuration options array.
